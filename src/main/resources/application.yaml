@@ -3,9 +3,9 @@ server:
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://pg-34322047-hellosudhii-1e43.f.aivencloud.com:28282/onelove?sslmode=require
-    username: avnadmin
-    password: AVNS_VRDyu2cv5TegaI3MyZC
+    url: 
+    username: 
+    password: 
   jpa:
     hibernate:
       ddl-auto: update
