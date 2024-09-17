@@ -9,7 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDate;
+
 
 @Entity
 @Data
@@ -22,5 +23,5 @@ public class StockHistory {
     @NotNull(message = "Product Id required")
     private Long productId;
     private Integer quantityChanged;
-    private Date date;
+    private LocalDate date;
 }

@@ -32,4 +32,5 @@ public class ValidateController {
         errorResponse.put("error", "Body Required");
         return new ResponseEntity<>(errorResponse,HttpStatus.BAD_REQUEST);
     }
+
 }

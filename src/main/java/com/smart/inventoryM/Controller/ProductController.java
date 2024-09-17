@@ -2,7 +2,6 @@ package com.smart.inventoryM.Controller;
 
 import com.smart.inventoryM.Dto.ProductDto;
 import com.smart.inventoryM.Entity.Product;
-import com.smart.inventoryM.Entity.StockHistory;
 import com.smart.inventoryM.Service.ProductService;
 import com.smart.inventoryM.Service.StockHistoryService;
 import jakarta.validation.Valid;
@@ -10,9 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+
 
 @RestController("")
 public class ProductController {
@@ -29,20 +27,21 @@ public class ProductController {
         return ResponseEntity.ok(productResponse);
     }
     @PutMapping("/api/products/{id}/stock")
-    public ResponseEntity<?> updateProductById( @PathVariable("id") Long id,@RequestBody()ProductDto productDto){
-        final Optional<Product> promise = productService.findProductById(id);
-        StockHistory stock = new StockHistory();
-        if(promise.isPresent()){
-            stock.setProductId(id);
-            stock.setQuantityChanged(productDto.getQuantityChanged());
-            stock.setDate(new Date());
-            stockHistoryService.create(stock);
-        }
-        return ResponseEntity.ok(stock);
+    public ResponseEntity<?> updateProductById( @PathVariable("id") Long id,@Valid @RequestBody() ProductDto productDto){
+        Product updatedProduct = productService.updateStock(id,productDto);
+        return ResponseEntity.ok(updatedProduct);
     }
     @GetMapping("/api/products/low-stock")
-    public ResponseEntity<?> getLowStock(@RequestParam("category") String category){
-        final List<Product> lowStock = productService.findLowStockProductsByCatotory( category);
+    public ResponseEntity<?> getLowStock(@RequestParam( value = "category",required = false) String category){
+        final List<Product> lowStock = productService.findLowStockProductsByCategory(category);
         return ResponseEntity.ok(lowStock);
+    }
+    @GetMapping("/api/products/{id}/restock-suggestions")
+    public ResponseEntity<?> getStockSuggestions(@PathVariable("id") Long Id){
+        int suggestedAmount = productService.getRestockSuggestion(Id);
+        Map<String,Object> reponseMap = new HashMap<>();
+        reponseMap.put("ProductId",Id);
+        reponseMap.put("SuggestedRestockAmount",suggestedAmount);
+        return ResponseEntity.ok(reponseMap);
     }
 }
